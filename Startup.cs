@@ -35,7 +35,8 @@ namespace HelloDotnet5
                 builder.CircuitBreakerAsync(3,
                     TimeSpan.FromSeconds(10)));
 
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+                .AddCheck<ExternalEndpointHealthCheck>("OpenWeather");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
