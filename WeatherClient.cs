@@ -18,7 +18,7 @@ namespace HelloDotnet5
 
         public record Weather(string description);
         public record Main(decimal temp);
-        public record Forecast(Weather[] Weathers, Main main, long dt);
+        public record Forecast(Weather[] Weather, Main main, long dt);
 
         public async Task<Forecast> GetCurrentWeatherAsync(string city)
         {
