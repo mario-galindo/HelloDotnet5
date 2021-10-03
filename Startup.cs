@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Polly;
+using System;
 
 namespace HelloDotnet5
 {
@@ -31,7 +27,10 @@ namespace HelloDotnet5
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HelloDotnet5", Version = "v1" });
             });
-            services.AddHttpClient<WeatherClient>();
+            services.AddHttpClient<WeatherClient>()
+            .AddTransientHttpErrorPolicy(builder =>
+                builder.WaitAndRetryAsync(10, retryAttemp =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttemp))));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
